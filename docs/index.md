@@ -32,7 +32,7 @@ const metal = Generators.input(pickMetal);
 function boxPlot(width, height) {
   return Plot.plot({
     width,
-    height: height - 100,
+    height,
     marginLeft: 100,
     x: { grid: true, label: "Soil concentration (mg/kg)" },
     y: { grid: true, label: "District", tickSize: 0 },
@@ -86,7 +86,7 @@ const inputDistrict = Generators.input(pickDistrict);
 function biplot(width, height) {
   return Plot.plot({
     width,
-    height: height - 120,
+    height,
     x: {
       label: `PC1 (${d3.format(".1%")(
         varExplained.map((d) => d.variance)[0]
@@ -177,15 +177,17 @@ function screeplot(width, height) {
 ```
 
 <div class="grid grid-cols-4" style="grid-auto-rows: 145px;">
-  <div class="card grid-colspan-2 grid-rowspan-4">
+  <div class="card grid-colspan-2 grid-rowspan-4" style="display: flex; flex-direction: column; flex-wrap: nowrap;">
     <h2>Principal component analysis</h2>
     <h3>Axis scales are for observation scores. See table for loading values.</h3>
     ${pickDistrict}
-    ${resize((width, height) => biplot(width, height))}
+    <div style="flex-grow: 1;">
+      ${resize((width, height) => biplot(width, height))}
+    </div>
   </div>
-  <div class="card grid-colspan-2 grid-rowspan-2">
+  <div class="card grid-colspan-2 grid-rowspan-2" style="display: flex; flex-direction: column; flex-wrap: nowrap;">
     <h2>Variance explained</h2>
-    ${resize((width, height) => screeplot(width, height))}
+    <div style="flex-grow: 1">${resize((width, height) => screeplot(width, height))}</div>
   </div>
   <div class="card grid-colspan-2 grid-rowspan-2" style="padding: 0; border-radius: 12px; overflow: hidden;">
     ${Inputs.table(varLoadings.map(({PC1_scale, PC2_scale, ...rest}) => rest), {height: 320})}
@@ -193,12 +195,16 @@ function screeplot(width, height) {
 </div>
 
 <div class="grid grid-cols-4" style="grid-auto-rows: 160px;">
-  <div class="card grid-colspan-4 grid-rowspan-3">
+  <div class="card grid-colspan-4 grid-rowspan-3" style="display: flex; flex-direction: column; flex-wrap: nowrap;">
     <h2>Soil metal concentration by district</h2>
     <h3>Dots are individual soil sample values; black line is the median for each district. Box is the interquartile range. All values in mg/kg.</h3>
     ${pickMetal}
-    ${resize((width, height) => boxPlot(width, height))}
+    <div style="flex-grow: 1;">
+      ${resize((width, height) => boxPlot(width, height))}
+    </div>
   </div>
 </div>
 
-  <div class="note" label="Data">Bedoya-Perales, N.S., Escobedo-Pacheco, E., Maus, D. et al. Dataset of metals and metalloids in food crops and soils sampled across the mining region of Moquegua in Peru. Sci Data 10, 483 (2023). <a href="https://doi.org/10.1038/s41597-023-02363-0">https://doi.org/10.1038/s41597-023-02363-0</a></div>
+<div class="note" label="Data">
+  Bedoya-Perales, N.S., Escobedo-Pacheco, E., Maus, D. et al. Dataset of metals and metalloids in food crops and soils sampled across the mining region of Moquegua in Peru. Sci Data 10, 483 (2023). <a href="https://doi.org/10.1038/s41597-023-02363-0">https://doi.org/10.1038/s41597-023-02363-0</a>
+</div>
